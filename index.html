@@ -1,0 +1,1386 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Core -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoachOS — Program Management Platform</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23F59E0B' width='100' height='100'/><text x='50' y='65' font-size='70' font-weight='bold' text-anchor='middle' fill='white' font-family='monospace'>C</text></svg>" />
+
+    <!-- Fonts (preloaded for performance) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        rel="preload"
+        as="style"
+        href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap"
+    />
+    <link
+        href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap"
+        rel="stylesheet"
+    />
+
+    <!-- Primary SEO -->
+    <meta
+        name="description"
+        content="CoachOS — Program management platform for fitness coaches. Manage clients, schedule, rosters, and billing in one unified workspace."
+    />
+    <meta name="keywords" content="coaching, fitness management, program management, client management, scheduling, billing" />
+
+    <!-- Theme / Browser UI -->
+    <meta name="theme-color" content="#FFFBF0" />
+    <meta name="color-scheme" content="light" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="CoachOS — Program Management Platform" />
+    <meta property="og:description" content="Unified workspace for fitness coaches." />
+    <meta property="og:type" content="website" />
+
+    <style>
+        /* Global Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Global Font Settings */
+        :root {
+            --font-body: 'PT Sans', sans-serif;
+            --font-headline: 'Space Grotesk', sans-serif;
+            
+            /* Light Color Palette */
+            --bg-primary: #FFFBF0;
+            --bg-secondary: #F5F1E8;
+            --bg-tertiary: #EDE8DF;
+            --bg-overlay: rgba(255, 251, 240, 0.9);
+            
+            /* Beige & Neutral */
+            --beige-light: #F9F6F0;
+            --beige-medium: #E8DFD3;
+            --beige-dark: #D4C4B0;
+            
+            /* Text Colors */
+            --text-primary: #2C2C2C;
+            --text-secondary: #5A5A5A;
+            --text-muted: #8A8A8A;
+            --text-light: #B0B0B0;
+            
+            /* Accent Colors - Yellow & Warm */
+            --accent-primary: #F59E0B;
+            --accent-secondary: #FBBF24;
+            --accent-light: #FCD34D;
+            --accent-pale: #FEF3C7;
+            
+            /* Status Colors */
+            --status-success: #059669;
+            --status-warning: #D97706;
+            --status-danger: #DC2626;
+            --status-info: #0891B2;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(44, 44, 44, 0.1);
+            --shadow-md: 0 4px 12px rgba(44, 44, 44, 0.12);
+            --shadow-lg: 0 12px 32px rgba(44, 44, 44, 0.15);
+            --shadow-xl: 0 20px 60px rgba(44, 44, 44, 0.18);
+            
+            /* Transitions */
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            color: var(--text-primary);
+            font-family: var(--font-body);
+        }
+
+        /* App root sizing */
+        html,
+        body,
+        #root {
+            min-height: 100%;
+            width: 100%;
+        }
+
+        /* Body baseline */
+        body {
+            overflow-x: hidden;
+            overflow-y: auto;
+            background: var(--bg-primary);
+            line-height: 1.6;
+            letter-spacing: 0.2px;
+        }
+
+        /* Headline font usage */
+        h1,
+        h2,
+        h3,
+        .title,
+        .logo,
+        .card-title,
+        .content-title,
+        .detail-title,
+        .page-title {
+            font-family: var(--font-headline);
+        }
+
+        /* Link Reset */
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Button Reset */
+        button {
+            font-family: inherit;
+            border: none;
+            cursor: pointer;
+            background-color: transparent;
+        }
+
+        /* ===== APP CONTAINER ===== */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            background: linear-gradient(135deg, #FFFBF0 0%, #F5F1E8 50%, #FFFBF0 100%);
+        }
+
+        /* ===== HAMBURGER MENU ===== */
+        .hamburger {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 300;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid var(--beige-medium);
+            border-radius: 10px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .hamburger:hover {
+            background: var(--beige-light);
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2.5px;
+            background: var(--text-primary);
+            position: absolute;
+            transition: all var(--transition);
+            border-radius: 2px;
+        }
+
+        .hamburger span:nth-child(1) {
+            top: 15px;
+        }
+
+        .hamburger span:nth-child(2) {
+            top: 24px;
+        }
+
+        .hamburger span:nth-child(3) {
+            top: 33px;
+        }
+
+        .hamburger.open span:nth-child(1) {
+            transform: rotate(45deg);
+            top: 24px;
+        }
+
+        .hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.open span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 24px;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--beige-medium);
+            display: flex;
+            flex-direction: column;
+            transition: all var(--transition);
+            box-shadow: 2px 0 12px rgba(44, 44, 44, 0.08);
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .sidebar.mobile-hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--beige-medium);
+            border-radius: 3px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        .sidebar-header {
+            padding: 32px 24px;
+            border-bottom: 1px solid var(--beige-light);
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+            transition: transform var(--transition);
+        }
+
+        .sidebar-header:hover .logo {
+            transform: scale(1.02);
+        }
+
+        .logo-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            padding: 14px 16px;
+            border-radius: 10px;
+            background: transparent;
+            border: 2px solid transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all var(--transition);
+            font-family: var(--font-body);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform var(--transition);
+        }
+
+        .nav-item:hover {
+            background: var(--beige-light);
+            color: var(--text-primary);
+            border-color: var(--beige-medium);
+        }
+
+        .nav-item.active {
+            background: var(--accent-pale);
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .nav-item.active::before {
+            transform: scaleY(1);
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            transition: transform var(--transition);
+        }
+
+        .nav-item:hover .nav-icon {
+            transform: scale(1.1);
+        }
+
+        .sidebar-footer {
+            padding: 20px 12px;
+            border-top: 1px solid var(--beige-light);
+            background: white;
+        }
+
+        .sidebar-footer-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: all var(--transition);
+            font-family: var(--font-body);
+        }
+
+        .sidebar-footer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 32px;
+            background: white;
+            border-bottom: 1px solid var(--beige-light);
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 251, 240, 0.95);
+            gap: 24px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 2px 8px rgba(44, 44, 44, 0.06);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-width: 0;
+        }
+
+        .page-title {
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box {
+            background: var(--bg-secondary);
+            border: 2px solid var(--beige-medium);
+            color: var(--text-primary);
+            padding: 10px 16px 10px 38px;
+            border-radius: 8px;
+            font-size: 13px;
+            width: 220px;
+            font-family: var(--font-body);
+            transition: all var(--transition);
+        }
+
+        .search-box::placeholder {
+            color: var(--text-light);
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+            background: white;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            color: var(--text-muted);
+            font-size: 16px;
+            pointer-events: none;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+            font-weight: 700;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ===== CONTENT AREA ===== */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+            scroll-behavior: smooth;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background: var(--beige-medium);
+            border-radius: 4px;
+        }
+
+        .content::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        .content-header {
+            margin-bottom: 32px;
+            animation: slideInDown 0.6s var(--transition);
+        }
+
+        .content-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .content-subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        /* ===== CARDS ===== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid var(--beige-light);
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.6s var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.08), transparent);
+            transition: left 0.6s;
+        }
+
+        .card:hover {
+            border-color: var(--accent-primary);
+            background: var(--beige-light);
+            box-shadow: 0 8px 32px rgba(245, 158, 11, 0.15);
+            transform: translateY(-6px);
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background: rgba(5, 150, 105, 0.15);
+            color: var(--status-success);
+        }
+
+        .status-pending {
+            background: rgba(217, 119, 6, 0.15);
+            color: var(--status-warning);
+        }
+
+        .status-paused {
+            background: rgba(178, 190, 195, 0.15);
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .card-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+
+        .card-footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--beige-light);
+            display: flex;
+            gap: 12px;
+        }
+
+        .card-action {
+            flex: 1;
+            padding: 8px 12px;
+            background: var(--accent-pale);
+            border: 2px solid var(--accent-light);
+            color: var(--accent-primary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all var(--transition);
+            font-family: var(--font-body);
+        }
+
+        .card-action:hover {
+            background: var(--accent-secondary);
+            color: white;
+            border-color: var(--accent-secondary);
+        }
+
+        /* ===== DETAIL PANEL ===== */
+        .detail-panel {
+            position: fixed;
+            right: -450px;
+            top: 0;
+            width: 420px;
+            height: 100vh;
+            background: white;
+            border-left: 2px solid var(--beige-light);
+            box-shadow: -4px 0 32px rgba(44, 44, 44, 0.12);
+            transition: right var(--transition);
+            z-index: 200;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .detail-panel.open {
+            right: 0;
+        }
+
+        .detail-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .detail-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .detail-panel::-webkit-scrollbar-thumb {
+            background: var(--beige-medium);
+            border-radius: 3px;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 32px 24px;
+            border-bottom: 2px solid var(--beige-light);
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .detail-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .detail-close {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color var(--transition);
+        }
+
+        .detail-close:hover {
+            color: var(--accent-primary);
+        }
+
+        .detail-content {
+            padding: 24px;
+        }
+
+        .detail-section {
+            margin-bottom: 28px;
+        }
+
+        .detail-section-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            color: var(--text-primary);
+            line-height: 1.8;
+            padding: 14px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .detail-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all var(--transition);
+            margin-top: 28px;
+            font-family: var(--font-body);
+        }
+
+        .detail-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
+        }
+
+        /* ===== SECTION VISIBILITY ===== */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s var(--transition);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .card-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+
+            .detail-panel {
+                width: 360px;
+                right: -360px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                z-index: 150;
+            }
+
+            .main {
+                width: 100%;
+            }
+
+            .header {
+                padding: 20px 24px;
+                padding-left: 70px;
+            }
+
+            .page-title {
+                font-size: 14px;
+            }
+
+            .content {
+                padding: 24px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-content {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-panel {
+                width: 100%;
+                right: -100%;
+            }
+
+            .search-box {
+                width: 140px;
+            }
+
+            .content-title {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            .header-right {
+                width: 100%;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .content {
+                padding: 16px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .content-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- HAMBURGER MENU -->
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">CoachOS</div>
+                <div class="logo-sub">Program Manager</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-section="clients">
+                    <span class="nav-icon">👥</span>
+                    <span>Clients</span>
+                </button>
+                <button class="nav-item" data-section="schedule">
+                    <span class="nav-icon">📅</span>
+                    <span>Schedule</span>
+                </button>
+                <button class="nav-item" data-section="rosters">
+                    <span class="nav-icon">📋</span>
+                    <span>Rosters</span>
+                </button>
+                <button class="nav-item" data-section="billing">
+                    <span class="nav-icon">💰</span>
+                    <span>Billing</span>
+                </button>
+                <button class="nav-item" data-section="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Settings</span>
+                </button>
+                <button class="nav-item" data-section="analytics">
+                    <span class="nav-icon">📊</span>
+                    <span>Analytics</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="sidebar-footer-btn">Export Report</button>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER -->
+            <div class="header">
+                <div class="header-left">
+                    <div class="page-title" id="pageTitle">Clients</div>
+                </div>
+                <div class="header-right">
+                    <div class="search-container">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-box" id="searchInput" placeholder="Search...">
+                    </div>
+                    <button class="action-btn">+</button>
+                </div>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="content">
+                <!-- CLIENTS SECTION -->
+                <div class="section active" id="clients-section">
+                    <div class="content-header">
+                        <div class="content-title">Active Clients</div>
+                        <div class="content-subtitle">Manage your client roster and track engagement across programs</div>
+                    </div>
+                    <div class="card-grid" id="clientsGrid"></div>
+                </div>
+
+                <!-- SCHEDULE SECTION -->
+                <div class="section" id="schedule-section">
+                    <div class="content-header">
+                        <div class="content-title">Weekly Schedule</div>
+                        <div class="content-subtitle">View and manage all scheduled sessions for the week</div>
+                    </div>
+                    <div class="card-grid" id="scheduleGrid"></div>
+                </div>
+
+                <!-- ROSTERS SECTION -->
+                <div class="section" id="rosters-section">
+                    <div class="content-header">
+                        <div class="content-title">Program Rosters</div>
+                        <div class="content-subtitle">Organize clients into training groups and manage enrollments</div>
+                    </div>
+                    <div class="card-grid" id="rostersGrid"></div>
+                </div>
+
+                <!-- BILLING SECTION -->
+                <div class="section" id="billing-section">
+                    <div class="content-header">
+                        <div class="content-title">Billing & Payments</div>
+                        <div class="content-subtitle">Track invoices and payment status for all clients</div>
+                    </div>
+                    <div class="card-grid" id="billingGrid"></div>
+                </div>
+
+                <!-- ANALYTICS SECTION -->
+                <div class="section" id="analytics-section">
+                    <div class="content-header">
+                        <div class="content-title">Analytics</div>
+                        <div class="content-subtitle">Program performance metrics and client insights</div>
+                    </div>
+                    <div class="card-grid" id="analyticsGrid"></div>
+                </div>
+
+                <!-- SETTINGS SECTION -->
+                <div class="section" id="settings-section">
+                    <div class="content-header">
+                        <div class="content-title">Settings</div>
+                        <div class="content-subtitle">Configure your program preferences and integrations</div>
+                    </div>
+                    <div style="max-width: 600px;">
+                        <div class="card">
+                            <div class="card-title">Program Name</div>
+                            <div class="card-subtitle">Your organization's name</div>
+                            <input type="text" placeholder="e.g., Elite Fitness Coaching" style="width: 100%; margin-top: 12px; padding: 10px 12px; background: var(--bg-secondary); border: 2px solid var(--beige-medium); color: var(--text-primary); border-radius: 6px; font-family: var(--font-body); font-size: 13px; transition: all var(--transition);" onfocus="this.style.borderColor='var(--accent-primary)'; this.style.background='white'" onblur="this.style.borderColor='var(--beige-medium)'; this.style.background='var(--bg-secondary)'">
+                        </div>
+                        <div class="card">
+                            <div class="card-title">Default Client Fee</div>
+                            <div class="card-subtitle">Monthly coaching rate</div>
+                            <input type="text" placeholder="$120" style="width: 100%; margin-top: 12px; padding: 10px 12px; background: var(--bg-secondary); border: 2px solid var(--beige-medium); color: var(--text-primary); border-radius: 6px; font-family: var(--font-body); font-size: 13px; transition: all var(--transition);" onfocus="this.style.borderColor='var(--accent-primary)'; this.style.background='white'" onblur="this.style.borderColor='var(--beige-medium)'; this.style.background='var(--bg-secondary)'">
+                        </div>
+                        <div class="card">
+                            <div class="card-title">Enable Notifications</div>
+                            <div class="card-subtitle">Receive alerts for new signups and payments</div>
+                            <div style="margin-top: 12px; display: flex; align-items: center; gap: 12px;">
+                                <input type="checkbox" id="notif-toggle" checked style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent-primary);">
+                                <label for="notif-toggle" style="cursor: pointer; color: var(--text-secondary); font-weight: 600;">Enabled</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DETAIL PANEL -->
+        <div class="detail-panel" id="detailPanel">
+            <div class="detail-header">
+                <div class="detail-title" id="detailTitle">Client Details</div>
+                <button class="detail-close" id="closeDetailBtn">✕</button>
+            </div>
+            <div class="detail-content" id="detailContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===== DATA =====
+        const clients = [
+            { id: 1, name: 'Sarah Johnson', program: 'Strength Coaching', status: 'Active', lastSession: 'Mar 3', nextDue: 'Mar 10', fee: '$120', joined: 'Jan 15', checkIns: 12, satisfaction: 95 },
+            { id: 2, name: 'Mark Alvarez', program: 'CrossFit', status: 'Active', lastSession: 'Mar 2', nextDue: 'Mar 9', fee: '$150', joined: 'Feb 8', checkIns: 8, satisfaction: 88 },
+            { id: 3, name: 'Daniel Chen', program: 'Conditioning', status: 'Paused', lastSession: 'Feb 28', nextDue: 'Mar 15', fee: '$100', joined: 'Dec 12', checkIns: 5, satisfaction: 72 },
+            { id: 4, name: 'Emily Rodriguez', program: 'Strength Coaching', status: 'Active', lastSession: 'Mar 1', nextDue: 'Mar 8', fee: '$120', joined: 'Jan 22', checkIns: 14, satisfaction: 92 },
+            { id: 5, name: 'James Park', program: 'CrossFit', status: 'Active', lastSession: 'Mar 4', nextDue: 'Mar 11', fee: '$150', joined: 'Mar 1', checkIns: 2, satisfaction: 85 },
+            { id: 6, name: 'Lisa Wong', program: 'Conditioning', status: 'Active', lastSession: 'Mar 2', nextDue: 'Mar 9', fee: '$100', joined: 'Feb 15', checkIns: 7, satisfaction: 90 },
+        ];
+
+        const schedules = [
+            { time: 'Mon 5pm', trainer: 'You', program: 'Strength Group A', participants: 3 },
+            { time: 'Wed 5pm', trainer: 'Alex', program: 'CrossFit WOD', participants: 5 },
+            { time: 'Fri 4pm', trainer: 'You', program: 'Conditioning', participants: 2 },
+            { time: 'Sat 9am', trainer: 'Alex', program: 'Strength Group B', participants: 4 },
+            { time: 'Tue 6pm', trainer: 'Jordan', program: 'HIIT Sessions', participants: 6 },
+        ];
+
+        const rosters = [
+            { name: 'Strength Group A', members: 3, capacity: 8, active: true },
+            { name: 'CrossFit WOD', members: 5, capacity: 10, active: true },
+            { name: 'Conditioning', members: 2, capacity: 5, active: true },
+            { name: 'HIIT Sessions', members: 6, capacity: 8, active: true },
+        ];
+
+        const billing = [
+            { client: 'Sarah Johnson', amount: '$120', date: 'Mar 1', status: 'Paid', dueDate: 'Apr 1' },
+            { client: 'Mark Alvarez', amount: '$150', date: 'Mar 1', status: 'Pending', dueDate: 'Mar 15' },
+            { client: 'Emily Rodriguez', amount: '$120', date: 'Feb 28', status: 'Paid', dueDate: 'Mar 28' },
+            { client: 'Daniel Chen', amount: '$0', date: 'Paused', status: 'Paused', dueDate: 'N/A' },
+            { client: 'James Park', amount: '$150', date: 'Mar 3', status: 'Paid', dueDate: 'Apr 3' },
+            { client: 'Lisa Wong', amount: '$100', date: 'Mar 1', status: 'Paid', dueDate: 'Apr 1' },
+        ];
+
+        const analytics = [
+            { metric: 'Total Revenue', value: '$2,850', trend: '+12%', icon: '💵' },
+            { metric: 'Active Clients', value: '5', trend: '+2', icon: '👥' },
+            { metric: 'Client Retention', value: '94%', trend: '+8%', icon: '📈' },
+            { metric: 'Avg Satisfaction', value: '88%', trend: '+5%', icon: '⭐' },
+            { metric: 'Sessions This Week', value: '15', trend: '+3', icon: '📅' },
+            { metric: 'Pending Payments', value: '$150', trend: '-$100', icon: '⏳' },
+        ];
+
+        // ===== DOM ELEMENTS =====
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('.section');
+        const detailPanel = document.getElementById('detailPanel');
+        const closeDetailBtn = document.getElementById('closeDetailBtn');
+        const pageTitle = document.getElementById('pageTitle');
+
+        // ===== RENDER FUNCTIONS =====
+        function renderClients() {
+            const grid = document.getElementById('clientsGrid');
+            grid.innerHTML = clients.map((client, index) => `
+                <div class="card" style="animation-delay: ${index * 0.1}s;">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">${client.name}</div>
+                            <div class="card-subtitle">${client.program}</div>
+                        </div>
+                        <span class="status-badge status-${client.status.toLowerCase()}">
+                            <span class="status-dot"></span>
+                            ${client.status}
+                        </span>
+                    </div>
+                    <div class="card-content">
+                        <div class="info-block">
+                            <div class="info-label">Last Session</div>
+                            <div class="info-value">${client.lastSession}</div>
+                        </div>
+                        <div class="info-block">
+                            <div class="info-label">Next Due</div>
+                            <div class="info-value">${client.nextDue}</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="card-action" onclick="showClientDetails(${client.id})">View Details</button>
+                        <button class="card-action">Send Update</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderSchedules() {
+            const grid = document.getElementById('scheduleGrid');
+            grid.innerHTML = schedules.map((schedule, index) => `
+                <div class="card" style="animation-delay: ${index * 0.1}s;">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">${schedule.time}</div>
+                            <div class="card-subtitle">${schedule.program}</div>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="info-block">
+                            <div class="info-label">Trainer</div>
+                            <div class="info-value">${schedule.trainer}</div>
+                        </div>
+                        <div class="info-block">
+                            <div class="info-label">Enrolled</div>
+                            <div class="info-value">${schedule.participants}</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="card-action">Edit</button>
+                        <button class="card-action">Cancel</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderRosters() {
+            const grid = document.getElementById('rostersGrid');
+            grid.innerHTML = rosters.map((roster, index) => {
+                const utilization = Math.round((roster.members / roster.capacity) * 100);
+                return `
+                    <div class="card" style="animation-delay: ${index * 0.1}s;">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">${roster.name}</div>
+                                <div class="card-subtitle">${roster.members} of ${roster.capacity} members</div>
+                            </div>
+                            <span class="status-badge status-active">
+                                <span class="status-dot"></span>
+                                Active
+                            </span>
+                        </div>
+                        <div style="margin: 20px 0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span class="info-label">Utilization</span>
+                                <span style="color: var(--accent-primary); font-weight: 700; font-size: 13px;">${utilization}%</span>
+                            </div>
+                            <div style="height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; width: ${utilization}%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="card-action">Manage</button>
+                            <button class="card-action">Add Client</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderBilling() {
+            const grid = document.getElementById('billingGrid');
+            grid.innerHTML = billing.map((bill, index) => `
+                <div class="card" style="animation-delay: ${index * 0.1}s;">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">${bill.client}</div>
+                            <div class="card-subtitle">Due: ${bill.dueDate}</div>
+                        </div>
+                        <span class="status-badge status-${bill.status.toLowerCase()}">
+                            <span class="status-dot"></span>
+                            ${bill.status}
+                        </span>
+                    </div>
+                    <div class="card-content">
+                        <div class="info-block">
+                            <div class="info-label">Amount</div>
+                            <div class="info-value">${bill.amount}</div>
+                        </div>
+                        <div class="info-block">
+                            <div class="info-label">Invoice Date</div>
+                            <div class="info-value">${bill.date}</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="card-action">Record Payment</button>
+                        <button class="card-action">Send Invoice</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAnalytics() {
+            const grid = document.getElementById('analyticsGrid');
+            grid.innerHTML = analytics.map((item, index) => `
+                <div class="card" style="animation-delay: ${index * 0.1}s;">
+                    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                        <div>
+                            <div class="card-title">${item.metric}</div>
+                            <div style="margin-top: 8px; font-size: 28px; font-weight: 700; color: var(--accent-primary);">${item.value}</div>
+                        </div>
+                        <div style="font-size: 32px;">${item.icon}</div>
+                    </div>
+                    <div style="margin-top: 16px; padding: 10px 12px; background: rgba(245, 158, 11, 0.08); border-radius: 6px; border-left: 3px solid var(--accent-primary);">
+                        <span style="color: var(--status-success); font-weight: 700; font-size: 12px;">${item.trend}</span>
+                        <span style="color: var(--text-muted); font-size: 12px;"> from last month</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showSection(sectionId) {
+            sections.forEach(s => s.classList.remove('active'));
+            document.getElementById(`${sectionId}-section`).classList.add('active');
+            
+            pageTitle.textContent = sectionId.charAt(0).toUpperCase() + sectionId.slice(1);
+            
+            if (sectionId === 'clients') renderClients();
+            else if (sectionId === 'schedule') renderSchedules();
+            else if (sectionId === 'rosters') renderRosters();
+            else if (sectionId === 'billing') renderBilling();
+            else if (sectionId === 'analytics') renderAnalytics();
+
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('mobile-hidden');
+                hamburger.classList.remove('open');
+            }
+        }
+
+        function showClientDetails(clientId) {
+            const client = clients.find(c => c.id === clientId);
+            if (!client) return;
+
+            document.getElementById('detailTitle').textContent = client.name;
+            document.getElementById('detailContent').innerHTML = `
+                <div class="detail-section">
+                    <div class="detail-section-title">Program</div>
+                    <div class="detail-value">${client.program}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">Status</div>
+                    <div class="detail-value">${client.status}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">Monthly Fee</div>
+                    <div class="detail-value">${client.fee}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">Last Session</div>
+                    <div class="detail-value">${client.lastSession}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">Next Session Due</div>
+                    <div class="detail-value">${client.nextDue}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">Member Since</div>
+                    <div class="detail-value">${client.joined}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">Check-ins Completed</div>
+                    <div class="detail-value">${client.checkIns}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">Satisfaction Score</div>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-top: 10px;">
+                        <div style="font-size: 32px; font-weight: 700; color: var(--accent-primary);">${client.satisfaction}%</div>
+                        <div style="flex: 1; height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden;">
+                            <div style="height: 100%; width: ${client.satisfaction}%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); border-radius: 3px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="detail-button">Send Check-in Request</button>
+                <button class="detail-button" style="background: rgba(220, 38, 38, 0.15); color: var(--status-danger); margin-top: 12px; border: 2px solid rgba(220, 38, 38, 0.3);">Pause Program</button>
+            `;
+            detailPanel.classList.add('open');
+        }
+
+        // ===== EVENT LISTENERS =====
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('open');
+            sidebar.classList.toggle('mobile-hidden');
+        });
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                showSection(item.dataset.section);
+            });
+        });
+
+        closeDetailBtn.addEventListener('click', () => {
+            detailPanel.classList.remove('open');
+        });
+
+        detailPanel.addEventListener('click', (e) => e.stopPropagation());
+
+        document.addEventListener('click', (e) => {
+            if (!detailPanel.contains(e.target) && !e.target.closest('.card-action')) {
+                detailPanel.classList.remove('open');
+            }
+        });
+
+        // ===== INITIALIZE =====
+        renderClients();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('mobile-hidden');
+                hamburger.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>
