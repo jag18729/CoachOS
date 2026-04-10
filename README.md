@@ -1,93 +1,118 @@
 # CoachOS
 
-**Unified program management platform for fitness coaches**
+**Program management platform for fitness coaches and small training businesses**
 
-Manage clients, schedules, rosters, and billing from a single workspace — no context switching required.
+Built to mirror how coaches actually think: clients, sessions, billing. One screen, no context switching, no SaaS bloat.
 
-[![Live Site](https://img.shields.io/badge/Live-jag18729.github.io/CoachOS-orange)](https://jag18729.github.io/CoachOS)
+[![Live Site](https://img.shields.io/badge/Live-jag18729.github.io/CoachOS-blue)](https://jag18729.github.io/CoachOS/)
 [![Deploy](https://github.com/jag18729/CoachOS/actions/workflows/deploy.yml/badge.svg)](https://github.com/jag18729/CoachOS/actions)
 
 ---
 
 ## Features
 
-- **Unified Workspace**: Clients, schedule, rosters, and billing in one interface
-- **Inline Detail Panels**: Click any client card to expand full profile without leaving the view
-- **Weekly Schedule View**: See all sessions, trainers, and enrollment counts at a glance
-- **Roster Management**: Organize clients into program groups with real-time capacity tracking
-- **Billing & Payments**: Track invoices, payment status, and due dates in one place
-- **Analytics Dashboard**: Revenue, retention, satisfaction scores, and month-over-month trends
-- **Responsive Design**: Fully functional on desktop, tablet, and mobile
-- **Zero Dependencies**: Pure HTML/CSS/JS — no build process, no installation
+- **Dashboard**: Active clients, pending check-ins, monthly revenue, sessions this week at a glance
+- **Client Management**: Searchable roster with status, billing, and group filters; slide-in profile panel with full history
+- **Check-in Inbox**: Weekly client check-ins with energy/sleep/compliance metrics, coach review workflow with confirmation
+- **Schedule**: 7-day week grid with session cards, add/view sessions inline
+- **Billing**: Invoice table with tab filters, mark-paid actions, and invoice generation with session linking
+- **Rosters**: Group cards with capacity bars, add clients to groups
+- **Analytics**: CSS-only bar charts for monthly revenue, client retention, compliance scores, top performers
+- **Settings**: Program config, role selector (Admin/Coach), light/dark theme toggle, notification preferences
 
 ---
 
 ## Live Demo
 
-**Production:** https://jag18729.github.io/CoachOS
+**Production:** https://jag18729.github.io/CoachOS/
 
-| Theme | Description |
-|-------|-------------|
-| [Light Theme](https://jag18729.github.io/CoachOS/index.html) | Default — warm white and gold |
-| [Dark Theme](https://jag18729.github.io/CoachOS/dark.html) | Deep slate and cyan |
-
----
-
-## HCI Principles
-
-| Principle | Implementation |
-|-----------|---------------|
-| Workflow Closure | All client data (status, sessions, billing) accessible from one screen |
-| Mental Models | Interface mirrors how coaches think: clients → sessions → money |
-| Task Context | Inline expansion preserves focus; no page navigation required |
-| Direct Manipulation | Cards respond to clicks immediately — no modals, no intermediate steps |
-
-**Usability goal:** Answer "What is client X's status, next session, and payment status?" in under 30 seconds. Current fragmented workflow takes 3–5 minutes.
+| View | Description |
+|------|-------------|
+| Dashboard | Stat cards + activity feed + quick actions |
+| Clients | Filter by status, group, billing; click for full profile |
+| Check-ins | Review inbox with metric bars and coach response |
+| Schedule | Weekly grid with session management |
+| Billing | Invoice tracking with generate/mark-paid workflows |
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Markup | HTML5 (semantic) |
-| Styles | CSS3 (custom properties, animations, responsive) |
-| Logic | Vanilla JavaScript (ES6+) |
-| Fonts | Space Grotesk (headlines), PT Sans (body) |
-| Deployment | GitHub Pages via GitHub Actions |
+| Layer | Technology | Why |
+|-------|------------|-----|
+| Framework | React 18 | Component architecture, context-based state |
+| Build | Vite | Sub-second HMR, optimized production builds |
+| Styling | Tailwind CSS v3 | Utility-first, dark mode via class strategy |
+| Routing | React Router v6 (HashRouter) | GitHub Pages compatible, no server-side fallback needed |
+| Icons | lucide-react | Consistent icon set, tree-shakeable |
+| Fonts | Space Grotesk + PT Sans | Display/body pairing from the design system |
+| State | React Context + useReducer | No external state library needed at this scale |
+| Deploy | GitHub Actions + GitHub Pages | Zero-cost hosting, automated on push to main |
 
 ---
 
 ## Quick Start
 
 ```bash
-# Clone
 git clone https://github.com/jag18729/CoachOS.git
 cd CoachOS
-
-# Open in browser (no build required)
-open index.html        # Light theme
-open dark.html         # Dark theme
+npm install
+npm run dev
 ```
 
-On Windows: double-click `index.html` or right-click → Open With → Chrome/Firefox.
+Open http://localhost:5173/CoachOS/ in your browser.
+
+### Production Build
+
+```bash
+npm run build
+npx serve dist
+```
 
 ---
 
 ## Project Structure
 
 ```
-CoachOS/
-├── index.html          # Light theme — primary app
-├── dark.html           # Dark theme variant
-├── README.md           # This file
-├── QUICKSTART.md       # Usage guide
-├── LICENSE             # MIT License
-├── .gitignore
-└── docs/
-    ├── DESIGN.md       # Design system (colors, typography, components)
-    └── proposal.pdf    # HCI final project proposal
+src/
+├── components/
+│   ├── analytics/     # CSS-only charts, derived stats
+│   ├── billing/       # Invoice table, generate modal
+│   ├── checkins/      # Inbox, review modal, toast
+│   ├── clients/       # Card grid, filters, profile panel
+│   ├── dashboard/     # Stat cards, activity feed
+│   ├── layout/        # Sidebar, top bar, main layout
+│   ├── rosters/       # Group cards, add client modal
+│   ├── schedule/      # Week grid, session cards, add modal
+│   ├── settings/      # Config inputs, role/theme toggles
+│   └── ui/            # Button, Modal, Avatar, StatusPill, Card
+├── context/           # AppContext (useReducer), ThemeContext
+└── data/              # Seed data (clients, sessions, check-ins, invoices, rosters)
 ```
+
+---
+
+## Design System
+
+| Element | Light | Dark |
+|---------|-------|------|
+| Background | `#FFFBF0` | `#0F172A` |
+| Card | `#FFFFFF` | `#1E293B` |
+| Accent | `#D4A017` (gold) | `#06B6D4` (cyan) |
+| Text | `#1E293B` | `#F1F5F9` |
+
+Full design spec in [`docs/DESIGN.md`](./docs/DESIGN.md).
+
+---
+
+## Role System
+
+| Role | Access |
+|------|--------|
+| Admin | All sections |
+| Coach | Hides Billing and Analytics |
+
+Switch roles in Settings. No authentication; roles are simulated via context.
 
 ---
 
@@ -95,20 +120,10 @@ CoachOS/
 
 | Name | Role |
 |------|------|
-| Rafael Garcia ([@jag18729](https://github.com/jag18729)) | Frontend & Project Lead |
-| Matthieu Resurreccion | UI Design |
-| Christopher Butler | UX Research |
-
----
-
-## Links
-
-- [Design System](./docs/DESIGN.md)
-- [Quick Start Guide](./QUICKSTART.md)
-- [HCI Proposal](./docs/proposal.pdf)
+| Rafael Garcia ([@jag18729](https://github.com/jag18729)) | Lead Developer |
 
 ---
 
 ## License
 
-California State University, Northridge — COMP 485: Human-Computer Interaction Final Project
+California State University, Northridge; COMP 485 Senior Design Project
