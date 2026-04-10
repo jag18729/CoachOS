@@ -116,14 +116,6 @@ Switch roles in Settings. No authentication; roles are simulated via context.
 
 ---
 
-## Team
-
-| Name | Role |
-|------|------|
-| Rafael Garcia ([@jag18729](https://github.com/jag18729)) | Lead Developer |
-
----
-
 ## License
 
 California State University, Northridge; COMP 485 Senior Design Project
