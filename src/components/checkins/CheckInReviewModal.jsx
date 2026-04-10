@@ -11,7 +11,7 @@ function MetricBar({ label, value }) {
     <div>
       <div className="flex items-center justify-between mb-1">
         <span className="text-sm text-[var(--text-muted)]">{label}</span>
-        <span className="text-sm font-bold text-[var(--text-primary)]">{value}/5</span>
+        <span className="text-sm font-mono font-bold text-[var(--text-primary)]">{value}/5</span>
       </div>
       <div className="w-full h-2 bg-[var(--bg-secondary)] rounded-full overflow-hidden">
         <div className={`h-full rounded-full ${color} transition-all duration-300`} style={{ width: `${pct}%` }} />

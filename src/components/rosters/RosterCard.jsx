@@ -28,7 +28,7 @@ export default function RosterCard({ roster, onAddClient }) {
       <div className="mb-3">
         <div className="flex items-center justify-between mb-1">
           <span className="text-xs text-[var(--text-muted)]">Capacity</span>
-          <span className="text-xs font-bold text-[var(--text-primary)]">{enrolled}/{roster.capacity}</span>
+          <span className="text-xs font-mono font-bold text-[var(--text-primary)]">{enrolled}/{roster.capacity}</span>
         </div>
         <div className="w-full h-2 bg-[var(--bg-secondary)] rounded-full overflow-hidden">
           <div

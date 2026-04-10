@@ -24,3 +24,4 @@ node_modules/
 
 # Build output
 dist/
+old-index.html

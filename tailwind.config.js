@@ -7,6 +7,7 @@ export default {
       fontFamily: {
         sans: ['PT Sans', 'sans-serif'],
         display: ['Space Grotesk', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
         brand: {

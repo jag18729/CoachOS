@@ -5,7 +5,7 @@ export default function StatCard({ icon: Icon, label, value, color }) {
         <Icon size={22} className="text-white" />
       </div>
       <div>
-        <p className="text-2xl font-display font-bold text-[var(--text-primary)]">{value}</p>
+        <p className="text-2xl font-mono font-bold text-[var(--text-primary)] tracking-tight">{value}</p>
         <p className="text-sm text-[var(--text-muted)]">{label}</p>
       </div>
     </div>

@@ -40,7 +40,7 @@ export default function BillingView() {
         ].map(({ label, value, color }) => (
           <div key={label} className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-5">
             <p className="text-sm text-[var(--text-muted)] mb-1">{label}</p>
-            <p className={`text-2xl font-display font-bold ${color}`}>${value.toLocaleString()}</p>
+            <p className={`text-2xl font-mono font-bold tracking-tight ${color}`}>${value.toLocaleString()}</p>
           </div>
         ))}
       </div>

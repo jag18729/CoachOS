@@ -100,11 +100,11 @@ export default function ClientProfile() {
             </div>
             <div>
               <p className="text-xs text-[var(--text-muted)] mb-1">Monthly Rate</p>
-              <p className="text-sm font-bold text-[var(--text-primary)]">${client.monthlyRate}</p>
+              <p className="text-sm font-mono font-bold text-[var(--text-primary)]">${client.monthlyRate}</p>
             </div>
             <div>
               <p className="text-xs text-[var(--text-muted)] mb-1">Sessions</p>
-              <p className="text-sm font-bold text-[var(--text-primary)]">{client.sessionsCompleted}</p>
+              <p className="text-sm font-mono font-bold text-[var(--text-primary)]">{client.sessionsCompleted}</p>
             </div>
             <div>
               <p className="text-xs text-[var(--text-muted)] mb-1">Joined</p>
@@ -170,7 +170,7 @@ export default function ClientProfile() {
                 {clientInvoices.map(inv => (
                   <div key={inv.id} className="bg-[var(--bg-secondary)] rounded-lg p-3 flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-bold text-[var(--text-primary)]">${inv.amount}</p>
+                      <p className="text-sm font-mono font-bold text-[var(--text-primary)]">${inv.amount}</p>
                       <p className="text-xs text-[var(--text-muted)]">Due {inv.dueDate}</p>
                     </div>
                     <StatusPill status={inv.status} />

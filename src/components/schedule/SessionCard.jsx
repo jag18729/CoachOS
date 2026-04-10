@@ -17,7 +17,7 @@ export default function SessionCard({ session, onClick }) {
       onKeyDown={e => { if (e.key === 'Enter' && onClick) onClick() }}
       aria-label={`${session.clientName} ${session.type} session at ${session.time}`}
     >
-      <p className="font-bold truncate">{session.time}</p>
+      <p className="font-mono font-bold truncate">{session.time}</p>
       <p className="truncate">{session.clientName}</p>
       <p className="opacity-75">{session.type}</p>
     </div>

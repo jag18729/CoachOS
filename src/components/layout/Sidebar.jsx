@@ -55,7 +55,7 @@ export default function Sidebar({ open, onClose }) {
       >
         {/* Logo */}
         <div className="flex items-center justify-between h-16 px-5 border-b border-[var(--border)]">
-          <span className="text-xl font-display font-bold text-[var(--accent)]">CoachOS</span>
+          <span className="text-xl font-mono font-bold text-[var(--accent)] tracking-tight">CoachOS</span>
           <button
             onClick={onClose}
             className="p-1 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] lg:hidden focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
@@ -87,7 +87,7 @@ export default function Sidebar({ open, onClose }) {
                 <Icon size={20} />
                 <span className="flex-1">{label}</span>
                 {badge && pendingCheckIns > 0 && (
-                  <span className="ml-auto bg-brand-red text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="ml-auto bg-brand-red text-white text-xs font-mono font-bold rounded-full w-5 h-5 flex items-center justify-center">
                     {pendingCheckIns}
                   </span>
                 )}

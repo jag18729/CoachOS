@@ -104,7 +104,7 @@ export default function ScheduleView() {
                     : 'bg-[var(--bg-secondary)] text-[var(--text-muted)]'
                 }`}>
                   <p className="text-xs font-bold">{DAYS[i]}</p>
-                  <p className="text-lg font-display font-bold">{date.getDate()}</p>
+                  <p className="text-lg font-mono font-bold">{date.getDate()}</p>
                 </div>
 
                 {/* Sessions */}

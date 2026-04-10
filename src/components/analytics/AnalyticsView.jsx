@@ -46,12 +46,12 @@ export default function AnalyticsView() {
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-5 text-center">
-          <p className="text-4xl font-display font-bold text-[var(--accent)]">{retention}%</p>
+          <p className="text-4xl font-mono font-bold text-[var(--accent)] tracking-tight">{retention}%</p>
           <p className="text-sm text-[var(--text-muted)] mt-1">Client Retention</p>
           <p className="text-xs text-[var(--text-muted)]">{activeCount} of {totalCount} active</p>
         </div>
         <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-5 text-center">
-          <p className="text-4xl font-display font-bold text-[var(--accent)]">{avgCompliance}</p>
+          <p className="text-4xl font-mono font-bold text-[var(--accent)] tracking-tight">{avgCompliance}</p>
           <p className="text-sm text-[var(--text-muted)] mt-1">Avg Compliance Score</p>
           <p className="text-xs text-[var(--text-muted)]">out of 5</p>
         </div>
@@ -84,7 +84,7 @@ export default function AnalyticsView() {
                   style={{ width: `${Math.max((month.total / maxRevenue) * 100, month.total > 0 ? 10 : 0)}%` }}
                 >
                   {month.total > 0 && (
-                    <span className="text-xs font-bold text-white whitespace-nowrap">${month.total}</span>
+                    <span className="text-xs font-mono font-bold text-white whitespace-nowrap">${month.total}</span>
                   )}
                 </div>
               </div>
